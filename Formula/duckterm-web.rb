@@ -47,10 +47,29 @@ class DucktermWeb < Formula
   def caveats
     <<~EOS
       Reuses your existing Node (>= 22.5) — no extra node installed.
-      Start (localhost + HTTP):   brew services start duckterm-web
-      LAN / HTTPS (run directly): duckterm-web --lan
-      The URL + one-time token is logged to:
+      Start as a persistent service:
+        brew services start duckterm-web
+
+      Open the first-login URL from:
         #{var}/log/duckterm-web.log
+
+      Runtime config lives at:
+        ~/.duckterm/config.json
+
+      Enable persistent LAN + HTTPS:
+        duckterm-web config --lan --reload
+
+      Back to localhost + HTTP:
+        duckterm-web config --local --reload
+
+      Change port:
+        duckterm-web config --port 1443 --reload
+
+      Inspect current state:
+        duckterm-web status
+
+      Foreground one-off LAN + HTTPS:
+        duckterm-web --lan
     EOS
   end
 end
