@@ -13,26 +13,26 @@
 class DucktermHookd < Formula
   desc "Daemon bridging Claude Code / Codex hooks to the DuckTerm mobile app"
   homepage "https://github.com/ducksee/duckterm-hookd-releases"
-  version "0.3.0"
+  version "0.3.1"
   license :cannot_represent # proprietary (see package LICENSE)
 
   on_macos do
     if Hardware::CPU.arm?
       url "https://github.com/ducksee/duckterm-hookd-releases/releases/download/v#{version}/duckterm-hookd_darwin-arm64.tar.gz"
-      sha256 "4a0cee378ed94b6d839062723694633f720f2588a9718b0abe3578ed7e65cf5f"
+      sha256 "e557687c4100cff0b7521c46774145f2880d3f9a9a4dd4905a760eb9eae65804"
     else
       url "https://github.com/ducksee/duckterm-hookd-releases/releases/download/v#{version}/duckterm-hookd_darwin-amd64.tar.gz"
-      sha256 "53c702b514d2e94da9f17c13dc7f194e8e8e875296c21eebcdf0d911a76ac58f"
+      sha256 "17e4f76cbcd724b8dab0799d147cfa0cd8a42e66372e41106a2f0bd79dd9c024"
     end
   end
 
   on_linux do
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
       url "https://github.com/ducksee/duckterm-hookd-releases/releases/download/v#{version}/duckterm-hookd_linux-arm64.tar.gz"
-      sha256 "359af25e7a423a15d570cff0496b7a36962d15b4d9e55aa5b11c39a92e82a50e"
+      sha256 "8d9f11f6e95b8891967981917d63011099e1e82cecea4b7bc09051c6234c397f"
     else
       url "https://github.com/ducksee/duckterm-hookd-releases/releases/download/v#{version}/duckterm-hookd_linux-amd64.tar.gz"
-      sha256 "b738981a8ebd666825dbcd4d856f392d4e1443fd8993938bd5c4226fe75406ce"
+      sha256 "834a1319d2a9cb6f637dddb7026619b5e17e23b460be45c78689fae39c6eee44"
     end
   end
 
@@ -44,9 +44,13 @@ class DucktermHookd < Formula
     <<~EOS
       duckterm-hookd is a daemon. After install:
 
-        duckterm-hookd pair --token <pairing-token>   # from the DuckTerm app
+        duckterm-hookd pair --qr                      # scan in the DuckTerm app (easiest)
+        # or:  duckterm-hookd pair --token <token>    # DuckTerm app → Settings → Agent Hooks
         duckterm-hookd install                        # wire agent hooks
         brew services start duckterm-hookd
+
+      Check pairing + install + connection state anytime:
+        duckterm-hookd status
 
       Starting the service before pairing is safe — it waits and retries
       with backoff until you pair.
@@ -55,6 +59,9 @@ class DucktermHookd < Formula
       ~/.claude/settings.json and ~/.codex/hooks.json without removing
       existing hooks. `duckterm-hookd uninstall` filters out only its own
       entries.
+
+      Upgrading (Homebrew won't restart a running service for you):
+        brew upgrade duckterm-hookd && brew services restart duckterm-hookd
     EOS
   end
 
