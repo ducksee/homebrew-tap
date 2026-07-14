@@ -1,9 +1,9 @@
 class DucktermWeb < Formula
   desc "Standalone browser terminal — SolidJS SPA + Node bridge (pure Node.js)"
   homepage "https://github.com/ducksee/DuckTerm"
-  url "https://github.com/ducksee/duckterm-web-releases/releases/download/v0.2.1/duckterm-web-v0.2.1-tiny.tar.gz"
-  version "0.2.1"
-  sha256 "ef27bde0092d7346f29cfad117c0a095439558f2748717a91bd3acb278bf5505"
+  url "https://github.com/ducksee/duckterm-web-releases/releases/download/v0.2.2/duckterm-web-v0.2.2-tiny.tar.gz"
+  version "0.2.2"
+  sha256 "579a64863716f9d7a985565f573cfa9360a9f24b07b9375312d641bd3f89d498"
   license :cannot_represent # proprietary (see package LICENSE)
 
   # No `depends_on "node"`: the "tiny" tarball is designed to REUSE whatever
