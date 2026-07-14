@@ -50,8 +50,8 @@ class DucktermWeb < Formula
       Start as a persistent service:
         brew services start duckterm-web
 
-      Open the first-login URL from:
-        #{var}/log/duckterm-web.log
+      Get the login URL (incl. the one-time token):
+        duckterm-web url
 
       Runtime config lives at:
         ~/.duckterm/config.json
@@ -70,6 +70,9 @@ class DucktermWeb < Formula
 
       Foreground one-off LAN + HTTPS:
         duckterm-web --lan
+
+      Upgrading (Homebrew won't restart a running service for you):
+        brew upgrade duckterm-web && brew services restart duckterm-web
     EOS
   end
 end
