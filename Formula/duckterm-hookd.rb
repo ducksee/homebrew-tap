@@ -13,26 +13,26 @@
 class DucktermHookd < Formula
   desc "Daemon bridging Claude Code / Codex hooks to the DuckTerm mobile app"
   homepage "https://github.com/ducksee/duckterm-hookd-releases"
-  version "0.3.1"
+  version "0.3.2"
   license :cannot_represent # proprietary (see package LICENSE)
 
   on_macos do
     if Hardware::CPU.arm?
       url "https://github.com/ducksee/duckterm-hookd-releases/releases/download/v#{version}/duckterm-hookd_darwin-arm64.tar.gz"
-      sha256 "e557687c4100cff0b7521c46774145f2880d3f9a9a4dd4905a760eb9eae65804"
+      sha256 "de4b45be292e709e30ac6d8d1edcea05cbdf773b48e8c5d72547b701830a1861"
     else
       url "https://github.com/ducksee/duckterm-hookd-releases/releases/download/v#{version}/duckterm-hookd_darwin-amd64.tar.gz"
-      sha256 "17e4f76cbcd724b8dab0799d147cfa0cd8a42e66372e41106a2f0bd79dd9c024"
+      sha256 "e57226e2f74e46f20519db37a1e7e22fea61cbba9f54cf8613fd5e536a7bd0f5"
     end
   end
 
   on_linux do
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
       url "https://github.com/ducksee/duckterm-hookd-releases/releases/download/v#{version}/duckterm-hookd_linux-arm64.tar.gz"
-      sha256 "8d9f11f6e95b8891967981917d63011099e1e82cecea4b7bc09051c6234c397f"
+      sha256 "b52ec791a749a93b64329204899ed0c3bb4ea15c20ebde765d67b3f377da582d"
     else
       url "https://github.com/ducksee/duckterm-hookd-releases/releases/download/v#{version}/duckterm-hookd_linux-amd64.tar.gz"
-      sha256 "834a1319d2a9cb6f637dddb7026619b5e17e23b460be45c78689fae39c6eee44"
+      sha256 "9788f52742023a184210fdc156b97e28536c99e117af4b1052a3d428cddce699"
     end
   end
 
