@@ -13,26 +13,26 @@
 class DucktermHookd < Formula
   desc "Daemon bridging Claude Code / Codex hooks to the DuckTerm mobile app"
   homepage "https://github.com/ducksee/duckterm-hookd-releases"
-  version "0.3.2"
+  version "0.3.3"
   license :cannot_represent # proprietary (see package LICENSE)
 
   on_macos do
     if Hardware::CPU.arm?
       url "https://github.com/ducksee/duckterm-hookd-releases/releases/download/v#{version}/duckterm-hookd_darwin-arm64.tar.gz"
-      sha256 "de4b45be292e709e30ac6d8d1edcea05cbdf773b48e8c5d72547b701830a1861"
+      sha256 "00f0025e2a9339b87afcfc7afc193ed9043adffcea837b1486665377bf701cf0"
     else
       url "https://github.com/ducksee/duckterm-hookd-releases/releases/download/v#{version}/duckterm-hookd_darwin-amd64.tar.gz"
-      sha256 "e57226e2f74e46f20519db37a1e7e22fea61cbba9f54cf8613fd5e536a7bd0f5"
+      sha256 "ed37cddd077ba3d4b2caccaf706b30ae153de14b2f0948dd21f39bf35b91b01a"
     end
   end
 
   on_linux do
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
       url "https://github.com/ducksee/duckterm-hookd-releases/releases/download/v#{version}/duckterm-hookd_linux-arm64.tar.gz"
-      sha256 "b52ec791a749a93b64329204899ed0c3bb4ea15c20ebde765d67b3f377da582d"
+      sha256 "c04e18d183795fefbdd0245a251a8b4496e7ffd605baec7402251ee413003aa5"
     else
       url "https://github.com/ducksee/duckterm-hookd-releases/releases/download/v#{version}/duckterm-hookd_linux-amd64.tar.gz"
-      sha256 "9788f52742023a184210fdc156b97e28536c99e117af4b1052a3d428cddce699"
+      sha256 "8761b947c96a1baba94579adddb95fde963b3a0a34996cba6f18b6b017eaa08a"
     end
   end
 
@@ -49,7 +49,7 @@ class DucktermHookd < Formula
         duckterm-hookd install                        # wire agent hooks
         brew services start duckterm-hookd
 
-      Check pairing + install + connection state anytime:
+      Check version, pairing, and installed-hook state anytime:
         duckterm-hookd status
 
       Starting the service before pairing is safe — it waits and retries
@@ -62,6 +62,9 @@ class DucktermHookd < Formula
 
       Upgrading (Homebrew won't restart a running service for you):
         brew upgrade duckterm-hookd && brew services restart duckterm-hookd
+
+      Uninstall (removes only DuckTerm's own hook entries, then the binary):
+        duckterm-hookd uninstall && brew services stop duckterm-hookd && brew uninstall duckterm-hookd
     EOS
   end
 
