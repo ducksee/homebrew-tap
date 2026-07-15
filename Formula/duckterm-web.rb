@@ -50,7 +50,7 @@ class DucktermWeb < Formula
       Start as a persistent service:
         brew services start duckterm-web
 
-      Get the login URL (incl. the one-time token):
+      Get the login URL (incl. the first-login bootstrap token):
         duckterm-web url
 
       Runtime config lives at:
@@ -65,14 +65,18 @@ class DucktermWeb < Formula
       Change port:
         duckterm-web config --port 1443 --reload
 
-      Inspect current state:
+      Inspect current state (version + update check):
         duckterm-web status
+        duckterm-web version
 
       Foreground one-off LAN + HTTPS:
         duckterm-web --lan
 
       Upgrading (Homebrew won't restart a running service for you):
         brew upgrade duckterm-web && brew services restart duckterm-web
+
+      Uninstall:
+        brew services stop duckterm-web && brew uninstall duckterm-web
     EOS
   end
 end
