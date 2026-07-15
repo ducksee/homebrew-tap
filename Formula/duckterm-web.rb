@@ -72,8 +72,9 @@ class DucktermWeb < Formula
       Foreground one-off LAN + HTTPS:
         duckterm-web --lan
 
-      Upgrading (Homebrew won't restart a running service for you):
-        brew upgrade duckterm-web && brew services restart duckterm-web
+      Upgrade (one command — refreshes the tap Homebrew won't auto-pull,
+      upgrades, and restarts the service):
+        duckterm-web upgrade
 
       Uninstall:
         brew services stop duckterm-web && brew uninstall duckterm-web
