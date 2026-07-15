@@ -13,26 +13,26 @@
 class DucktermHookd < Formula
   desc "Daemon bridging Claude Code / Codex hooks to the DuckTerm mobile app"
   homepage "https://github.com/ducksee/duckterm-hookd-releases"
-  version "0.3.3"
+  version "0.3.4"
   license :cannot_represent # proprietary (see package LICENSE)
 
   on_macos do
     if Hardware::CPU.arm?
       url "https://github.com/ducksee/duckterm-hookd-releases/releases/download/v#{version}/duckterm-hookd_darwin-arm64.tar.gz"
-      sha256 "00f0025e2a9339b87afcfc7afc193ed9043adffcea837b1486665377bf701cf0"
+      sha256 "1a83dc96412d373ba68ed1ba3431bfc7bab78d14b90c27949dbccfc449e0fcc9"
     else
       url "https://github.com/ducksee/duckterm-hookd-releases/releases/download/v#{version}/duckterm-hookd_darwin-amd64.tar.gz"
-      sha256 "ed37cddd077ba3d4b2caccaf706b30ae153de14b2f0948dd21f39bf35b91b01a"
+      sha256 "b8371b0e629e457081319591f3e0ad569c1cefdeae50ba9caa86a123996fa9c4"
     end
   end
 
   on_linux do
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
       url "https://github.com/ducksee/duckterm-hookd-releases/releases/download/v#{version}/duckterm-hookd_linux-arm64.tar.gz"
-      sha256 "c04e18d183795fefbdd0245a251a8b4496e7ffd605baec7402251ee413003aa5"
+      sha256 "2e91e75defdd063e78a1381ce95b92a0c467af51829c0b2272425b78e02a9ea6"
     else
       url "https://github.com/ducksee/duckterm-hookd-releases/releases/download/v#{version}/duckterm-hookd_linux-amd64.tar.gz"
-      sha256 "8761b947c96a1baba94579adddb95fde963b3a0a34996cba6f18b6b017eaa08a"
+      sha256 "0914d3cdae1a64950b8219e0167d33df4d86b1af451531635461ee25dc66fb0e"
     end
   end
 
@@ -60,8 +60,9 @@ class DucktermHookd < Formula
       existing hooks. `duckterm-hookd uninstall` filters out only its own
       entries.
 
-      Upgrading (Homebrew won't restart a running service for you):
-        brew upgrade duckterm-hookd && brew services restart duckterm-hookd
+      Upgrade (one command — refreshes the tap Homebrew won't auto-pull,
+      upgrades, and restarts the service):
+        duckterm-hookd upgrade
 
       Uninstall (removes only DuckTerm's own hook entries, then the binary):
         duckterm-hookd uninstall && brew services stop duckterm-hookd && brew uninstall duckterm-hookd
