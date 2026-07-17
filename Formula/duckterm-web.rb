@@ -4,24 +4,46 @@ class DucktermWeb < Formula
   url "https://github.com/ducksee/duckterm-web-releases/releases/download/v0.2.6/duckterm-web-v0.2.6-tiny.tar.gz"
   sha256 "4f657941b3c689ab0226dea54f099f428c54a3862b00c582a893a5b0cb03975f"
   license :cannot_represent # proprietary (see package LICENSE)
-  revision 1
+  revision 2
 
-  # Runtime commands executed by the packaged Node bridge. Keep these explicit:
-  # brew services starts with a stripped PATH, and a clean Mac has neither Node
-  # nor tmux. OpenSSL generates the HTTPS certificate used by LAN mode.
-  depends_on "node@24"
+  # Runtime commands executed by the packaged Node bridge. Keep tmux/OpenSSL
+  # explicit because brew services starts with a stripped PATH. Node is a
+  # versioned runtime requirement instead: the tiny package intentionally
+  # reuses a compatible nvm/fnm/Volta/asdf/mise/system/Brew installation.
   depends_on "openssl@3"
   depends_on "tmux"
 
   def install
     libexec.install Dir["*"]
-    node_bin = formula_opt_bin("node@24")
     openssl_bin = formula_opt_bin("openssl@3")
     tmux_bin = formula_opt_bin("tmux")
     (bin/"duckterm-web").write <<~SH
       #!/bin/sh
-      export PATH="#{node_bin}:#{openssl_bin}:#{tmux_bin}:$PATH"
-      exec "#{node_bin}/node" "#{libexec}/duckterm.mjs" "$@"
+      export PATH="#{openssl_bin}:#{tmux_bin}:$PATH"
+      find_node() {
+        for c in "${DUCKTERM_NODE:-}" "$(command -v node 2>/dev/null)" \
+          "#{HOMEBREW_PREFIX}/opt/node@24/bin/node" \
+          "#{HOMEBREW_PREFIX}/bin/node" \
+          "$HOME"/.nvm/versions/node/*/bin/node \
+          "$HOME"/.local/share/fnm/node-versions/*/installation/bin/node \
+          "$HOME"/.volta/bin/node \
+          "$HOME"/.asdf/installs/nodejs/*/bin/node "$HOME"/.asdf/shims/node \
+          "$HOME"/.local/share/mise/installs/node/*/bin/node \
+          "$HOME"/.local/share/mise/shims/node; do
+          [ -x "$c" ] || continue
+          v=$("$c" -p 'process.versions.node' 2>/dev/null) || continue
+          maj=${v%%.*}; rest=${v#*.}; min=${rest%%.*}
+          if [ "$maj" -gt 22 ] 2>/dev/null || { [ "$maj" -eq 22 ] && [ "$min" -ge 5 ]; } 2>/dev/null; then
+            echo "$c"; return 0
+          fi
+        done
+        return 1
+      }
+      NODE=$(find_node) || {
+        echo "duckterm-web needs Node >= 22.5. Existing nvm/fnm/Volta/asdf/mise/Brew installs are supported; otherwise run: brew install node@24" >&2
+        exit 1
+      }
+      exec "$NODE" "#{libexec}/duckterm.mjs" "$@"
     SH
     chmod 0755, bin/"duckterm-web"
   end
@@ -35,9 +57,12 @@ class DucktermWeb < Formula
 
   def caveats
     <<~EOS
-      Installs the Node, tmux, and OpenSSL runtimes used by DuckTerm Web.
-      Local tmux sessions work out of the box. SSH/Mosh targets still need
-      tmux installed on each remote host where you want persistent sessions.
+      Installs tmux and OpenSSL. DuckTerm Web reuses an existing Node >= 22.5
+      from nvm, fnm, Volta, asdf, mise, Homebrew, or PATH instead of installing
+      a duplicate Node runtime. If none is present: brew install node@24
+
+      Local tmux sessions work out of the box. SSH/Mosh targets still need tmux
+      installed on each remote host where you want persistent sessions.
 
       Start as a persistent service:
         brew services start duckterm-web
