@@ -66,6 +66,15 @@ class DucktermHookd < Formula
       upgrades, and restarts the service):
         duckterm-hookd upgrade
 
+      The Web control panel updates independently and does not restart hookd:
+        duckterm-hookd ui check
+        duckterm-hookd ui upgrade
+
+      The control panel starts locally at http://127.0.0.1:20080. Expose it
+      to a trusted LAN, or return it to local-only, without restarting hookd:
+        duckterm-hookd config --lan --reload
+        duckterm-hookd config --local --reload
+
       Uninstall (removes only DuckTerm's own hook entries, then the binary):
         duckterm-hookd uninstall && brew services stop duckterm-hookd && brew uninstall duckterm-hookd
     EOS
@@ -81,5 +90,6 @@ class DucktermHookd < Formula
 
   test do
     assert_match "duckterm-hookd", shell_output("#{bin}/duckterm-hookd version")
+    assert_match "127.0.0.1:20080", shell_output("#{bin}/duckterm-hookd config --json")
   end
 end
