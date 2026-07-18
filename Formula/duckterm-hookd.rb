@@ -13,26 +13,26 @@
 class DucktermHookd < Formula
   desc "Daemon bridging Claude Code / Codex hooks to the DuckTerm mobile app"
   homepage "https://github.com/ducksee/duckterm-hookd-releases"
-  version "0.3.5"
+  version "0.3.6"
   license :cannot_represent # proprietary (see package LICENSE)
 
   on_macos do
     if Hardware::CPU.arm?
       url "https://github.com/ducksee/duckterm-hookd-releases/releases/download/v#{version}/duckterm-hookd_darwin-arm64.tar.gz"
-      sha256 "2b5ac25365bb848e0f0c377e83e30726c16abdd628ef4d6b0796f65b56cd8404"
+      sha256 "bcc1ae159ef7ed9f036736035c1a0a73f4e1d5840c75cd35ebf2d85cfe19e0a3"
     else
       url "https://github.com/ducksee/duckterm-hookd-releases/releases/download/v#{version}/duckterm-hookd_darwin-amd64.tar.gz"
-      sha256 "74e028cb91c5bd5c3b09e765976e51e95851735bddc978cb0fc67cbcc46ac67f"
+      sha256 "ddb480e2191d3c8ef7d4775d1a5fa49a877e5df9ee7bf02ebff642cf421466e1"
     end
   end
 
   on_linux do
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
       url "https://github.com/ducksee/duckterm-hookd-releases/releases/download/v#{version}/duckterm-hookd_linux-arm64.tar.gz"
-      sha256 "f224cc669ad9e550baa91d9de54e0ab23413d5849ea442ef42c03a16f1d6e550"
+      sha256 "93977ecea15a5e8af9978dd2d4653aa0b729b9be8de6a259323402c36e67dbb7"
     else
       url "https://github.com/ducksee/duckterm-hookd-releases/releases/download/v#{version}/duckterm-hookd_linux-amd64.tar.gz"
-      sha256 "345416da0b62456d9c7d15746f8ad1f1ec1ac279422bdab94d2d5a9b4d50ed45"
+      sha256 "a1491e578b5081640ac47891b274ffbb33a800a3389b00469a457ce9c6662605"
     end
   end
 
@@ -42,10 +42,12 @@ class DucktermHookd < Formula
 
   def caveats
     <<~EOS
-      duckterm-hookd is a daemon. After install:
+      duckterm-hookd is a daemon. After install, choose ONE pairing method
+      (QR and token pairing are alternatives; do not run both):
 
         duckterm-hookd pair --qr                      # scan in the DuckTerm app (easiest)
-        # or:  duckterm-hookd pair --token <token>    # DuckTerm app → Settings → Agent Hooks
+        # or:  duckterm-hookd pair --token <token> --user <account-id>
+                                                       # DuckTerm app → Settings → Agent Hooks
         duckterm-hookd install                        # wire agent hooks
         brew services start duckterm-hookd
 
