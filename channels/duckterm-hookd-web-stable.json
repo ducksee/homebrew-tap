@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "channel": "stable",
+  "version": "0.2.2",
+  "contentHash": "99c38622c2fb9d22a924f51963437ce5c881a930801985a200c07d6ec13ff677",
+  "url": "https://github.com/ducksee/duckterm-hookd-releases/releases/download/web-v0.2.2/duckterm-hookd-web-0.2.2.tar.gz",
+  "sha256": "171c22c3553520cb8e3e872d81361b506bd3e2910e7cad1347d67d681da62882"
+}
