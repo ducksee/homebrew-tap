@@ -1,6 +1,6 @@
 # typed: false
 # frozen_string_literal: true
-#
+
 # Brew formula for duckterm-hookd. Source of truth lives at
 # tools/duckterm-hookd/Formula/duckterm-hookd.rb in the (private) DuckTerm
 # repo; a copy is published to ducksee/homebrew-tap. Release assets are
@@ -11,28 +11,28 @@
 # on ducksee/duckterm-hookd-releases → update sha256s here → push to tap.
 #
 class DucktermHookd < Formula
-  desc "Daemon bridging Claude Code / Codex hooks to the DuckTerm mobile app"
+  desc "Connect supported coding agents to the DuckTerm mobile app"
   homepage "https://github.com/ducksee/duckterm-hookd-releases"
-  version "0.3.7"
+  version "0.3.8"
   license :cannot_represent # proprietary (see package LICENSE)
 
   on_macos do
     if Hardware::CPU.arm?
       url "https://github.com/ducksee/duckterm-hookd-releases/releases/download/v#{version}/duckterm-hookd_darwin-arm64.tar.gz"
-      sha256 "30c1a2036398d151c93bea3bb2fce4ad3bfb1e177eb81bf2765bb91246cebfa0"
+      sha256 "b5a660186231fa9046dc0ac7df58c47c0ddd6ef20edb5e6d54e4bb597690dc1a"
     else
       url "https://github.com/ducksee/duckterm-hookd-releases/releases/download/v#{version}/duckterm-hookd_darwin-amd64.tar.gz"
-      sha256 "3b88346adf52fc98d70eaf50f28e86e524cd1f0eaf66303280eecf002037c12e"
+      sha256 "3c989f856571e925d02ffb4f827c737431df9159c3f878638b29154b57502cc3"
     end
   end
 
   on_linux do
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
       url "https://github.com/ducksee/duckterm-hookd-releases/releases/download/v#{version}/duckterm-hookd_linux-arm64.tar.gz"
-      sha256 "243220c99495d063e44ff5ba43121e79c385a24f765162c14716f820a727e85b"
+      sha256 "49589736e2dbefb4df069d49775aa39c2f4af59a4ddd52451ca86f329f63d16b"
     else
       url "https://github.com/ducksee/duckterm-hookd-releases/releases/download/v#{version}/duckterm-hookd_linux-amd64.tar.gz"
-      sha256 "6a2dd6d51f324f02ac39f2c74e6aec258580f46975cd52e554a50facdba071f0"
+      sha256 "c615d97c1f235217460f1a75a3a550104a678496b228ff95538eb56e1bca9d7e"
     end
   end
 
@@ -41,43 +41,45 @@ class DucktermHookd < Formula
   end
 
   def caveats
-    <<~EOS
-      duckterm-hookd is a daemon. After install, choose ONE pairing method
-      (QR and token pairing are alternatives; do not run both):
+    if version >= Version.new("0.3.8")
+      <<~EOS
+        Finish setup:
+          1. Open DuckTerm on iOS or Android → Settings → Agent notifications.
+          2. Run:
+               #{opt_bin}/duckterm-hookd setup --qr
+          3. In the app, open Agent notifications → Verify.
 
-        duckterm-hookd pair --qr                      # scan in the DuckTerm app (easiest)
-        # or:  duckterm-hookd pair --token <token> --user <account-id>
-                                                       # DuckTerm app → Settings → Agent Hooks
-        duckterm-hookd install                        # wire agent hooks
-        brew services start duckterm-hookd
+        This pairs the machine, connects supported coding agents, and starts the
+        background service. Running it again keeps the existing pairing.
 
-      Check version, pairing, and installed-hook state anytime:
-        duckterm-hookd status
+        Check setup health anytime:
+          #{opt_bin}/duckterm-hookd status
 
-      Starting the service before pairing is safe — it waits and retries
-      with backoff until you pair.
+        Update Hookd (both names work):
+          #{opt_bin}/duckterm-hookd update
+          #{opt_bin}/duckterm-hookd upgrade
 
-      The `install` step is non-destructive — it appends entries to
-      ~/.claude/settings.json and ~/.codex/hooks.json without removing
-      existing hooks. `duckterm-hookd uninstall` filters out only its own
-      entries.
+        The control panel is local at http://127.0.0.1:20080. On a trusted LAN:
+          duckterm-hookd config --lan --reload
 
-      Upgrade (one command — refreshes the tap Homebrew won't auto-pull,
-      upgrades, and restarts the service):
-        duckterm-hookd upgrade
+        Setup guide: https://dterm.limitwatch.app/setup
+      EOS
+    else
+      <<~EOS
+        Finish setup for this release:
+          1. Run: #{opt_bin}/duckterm-hookd pair --qr
+          2. Run: #{opt_bin}/duckterm-hookd install
+          3. Run: brew services start duckterm-hookd
 
-      The Web control panel updates independently and does not restart hookd:
-        duckterm-hookd ui check
-        duckterm-hookd ui upgrade
+        In DuckTerm on iOS or Android, QR pairing is under
+        Settings → Agent notifications → Pair by QR.
 
-      The control panel starts locally at http://127.0.0.1:20080. Expose it
-      to a trusted LAN, or return it to local-only, without restarting hookd:
-        duckterm-hookd config --lan --reload
-        duckterm-hookd config --local --reload
+        Check setup health anytime:
+          #{opt_bin}/duckterm-hookd status
 
-      Uninstall (removes only DuckTerm's own hook entries, then the binary):
-        duckterm-hookd uninstall && brew services stop duckterm-hookd && brew uninstall duckterm-hookd
-    EOS
+        Setup guide: https://dterm.limitwatch.app/setup
+      EOS
+    end
   end
 
   service do
