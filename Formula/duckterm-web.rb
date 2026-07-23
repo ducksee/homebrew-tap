@@ -1,8 +1,8 @@
 class DucktermWeb < Formula
   desc "Standalone browser terminal — SolidJS SPA + Node bridge (pure Node.js)"
   homepage "https://github.com/ducksee/DuckTerm"
-  url "https://github.com/ducksee/duckterm-web-releases/releases/download/v0.2.7/duckterm-web-v0.2.7-tiny.tar.gz"
-  sha256 "1b3d8d72c96262e060ff0c50392a8d9be86911a81eb8954d01166a6aac7026cc"
+  url "https://github.com/ducksee/duckterm-web-releases/releases/download/v0.2.8/duckterm-web-v0.2.8-tiny.tar.gz"
+  sha256 "75f0597a889af0bbbb18f1ee353e707265ea82b2b00aa687860d562c7c97793a"
   license :cannot_represent # proprietary (see package LICENSE)
 
   # Runtime commands executed by the packaged Node bridge. Keep tmux/OpenSSL
@@ -63,11 +63,11 @@ class DucktermWeb < Formula
       Local tmux sessions work out of the box. SSH/Mosh targets still need tmux
       installed on each remote host where you want persistent sessions.
 
-      Start as a persistent service:
-        brew services start duckterm-web
+      Start DuckTerm Web and open the login URL:
+        duckterm-web start
 
-      Get the login URL (incl. the first-login bootstrap token):
-        duckterm-web url
+      SSH / headless (start and print the URL only):
+        duckterm-web start --no-open
 
       Runtime config lives at:
         ~/.duckterm/config.json
