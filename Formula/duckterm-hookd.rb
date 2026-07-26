@@ -13,31 +13,32 @@
 class DucktermHookd < Formula
   desc "Connect supported coding agents to the DuckTerm mobile app"
   homepage "https://github.com/ducksee/duckterm-hookd-releases"
-  version "0.5.3"
+  version "0.5.4"
   license :cannot_represent # proprietary (see package LICENSE)
 
   on_macos do
     if Hardware::CPU.arm?
       url "https://github.com/ducksee/duckterm-hookd-releases/releases/download/v#{version}/duckterm-hookd_darwin-arm64.tar.gz"
-      sha256 "14646ecea6c3c8e3447b9c5e2685128f07f33532e24c5ec479ff7adad0ba774b"
+      sha256 "323d26a2487fb0ea90cbf367d9f2724c536ed91e8595c70b20cbcceee399f170"
     else
       url "https://github.com/ducksee/duckterm-hookd-releases/releases/download/v#{version}/duckterm-hookd_darwin-amd64.tar.gz"
-      sha256 "9a5f74a5328e2c3550fc044233e8000b924389b486367b431746e3a8db45a5a7"
+      sha256 "11e240e084d4ec3a8c29d81053582b3b0ab0afc5e58efa00fb820fe70f0ee595"
     end
   end
 
   on_linux do
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
       url "https://github.com/ducksee/duckterm-hookd-releases/releases/download/v#{version}/duckterm-hookd_linux-arm64.tar.gz"
-      sha256 "36cfcfe6555a9a4bc9daa4aa1bb48fe2f28c59ad8aae650ad38b3893e3441603"
+      sha256 "8a934582eab19f7b89de4abbe9eb072495696a8e16d0be5723600c4b15f92358"
     else
       url "https://github.com/ducksee/duckterm-hookd-releases/releases/download/v#{version}/duckterm-hookd_linux-amd64.tar.gz"
-      sha256 "2b359a3d35dd5abcaa2cdfc9ec36c103e5c78b64f5fe3eb52f7b9e7c85fa62f9"
+      sha256 "37c2791c71032ba4a5235452fef1b3be69eab8d75946149d9e770341adb0a9cf"
     end
   end
 
   def install
     bin.install "duckterm-hookd"
+    bin.install_symlink "duckterm-hookd" => "dhook"
     libexec.install "duckterm-hookd-web.tar.gz" if File.exist?("duckterm-hookd-web.tar.gz")
   end
 
@@ -102,6 +103,7 @@ class DucktermHookd < Formula
 
   test do
     assert_match "duckterm-hookd", shell_output("#{bin}/duckterm-hookd version")
+    assert_match "duckterm-hookd", shell_output("#{bin}/dhook version")
     assert_match "127.0.0.1:20080", shell_output("#{bin}/duckterm-hookd config --json")
   end
 end
