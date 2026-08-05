@@ -13,26 +13,26 @@
 class DucktermHookd < Formula
   desc "Connect supported coding agents to the DuckTerm mobile app"
   homepage "https://github.com/ducksee/duckterm-hookd-releases"
-  version "0.5.8"
+  version "0.5.9"
   license :cannot_represent # proprietary (see package LICENSE)
 
   on_macos do
     if Hardware::CPU.arm?
       url "https://github.com/ducksee/duckterm-hookd-releases/releases/download/v#{version}/duckterm-hookd_darwin-arm64.tar.gz"
-      sha256 "9058da88de6448b7912f1450a1d3a7c7c61857ad6cf4410aea113ce625473194"
+      sha256 "2a181fb8c1fdb57fb04f25c0f90b1f5eb6cffb7d029f19731b3a57801d7c775a"
     else
       url "https://github.com/ducksee/duckterm-hookd-releases/releases/download/v#{version}/duckterm-hookd_darwin-amd64.tar.gz"
-      sha256 "8f078c776693f0e50a6743c2b6af6884fa30de5b1a3bd028af9f54f0461a3ded"
+      sha256 "64f51034c8eec11e9592bdbfdc7283e1f9f1943975bdf991eb45847369bd59d4"
     end
   end
 
   on_linux do
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
       url "https://github.com/ducksee/duckterm-hookd-releases/releases/download/v#{version}/duckterm-hookd_linux-arm64.tar.gz"
-      sha256 "1e37bcb417abb620a91caa4e9ecc0dc1b4b4abe1e40a9b3ca0067001e2383df9"
+      sha256 "277b507eaeb5935b8ceae0eb5fca8eb7e5e008ede0725f047e80ec3065de7bf8"
     else
       url "https://github.com/ducksee/duckterm-hookd-releases/releases/download/v#{version}/duckterm-hookd_linux-amd64.tar.gz"
-      sha256 "23d8331d5181f7a13212ac08a90e82e38f010dbcec57a6b3443248e7b49c07b2"
+      sha256 "22ffc56a4121123c35003ac30f5eb42669c4136f6f6d98c2a16ff8e78cfa9c95"
     end
   end
 
@@ -79,7 +79,7 @@ class DucktermHookd < Formula
       <<~EOS
         Finish setup for this release:
           1. Run: #{opt_bin}/duckterm-hookd pair --qr
-          2. Run: #{opt_bin}/duckterm-hookd install
+          2. Run: #{opt_bin}/duckterm-hookd hook install
           3. Run: brew services start duckterm-hookd
 
         In DuckTerm on iOS or Android, QR pairing is under
@@ -96,6 +96,9 @@ class DucktermHookd < Formula
   service do
     run [opt_bin/"duckterm-hookd", "serve"]
     keep_alive true
+    # Homebrew derives this from the active prefix. Do not guess Intel/Apple
+    # Silicon paths in Hookd or freeze launchd's system-only default PATH.
+    environment_variables PATH: std_service_path_env
     log_path var/"log/duckterm-hookd.log"
     error_log_path var/"log/duckterm-hookd.log"
     working_dir var
