@@ -1,5 +1,27 @@
 # ducksee/homebrew-tap
 
+## DuckTerm Hookd
+
+Install the Hookd runtime and bundled local Web UI, then run guided setup to
+pair the machine, connect detected coding agents, and start the background
+service:
+
+```sh
+brew install ducksee/tap/duckterm-hookd
+duckterm-hookd setup --qr
+duckterm-hookd status
+```
+
+`setup --qr` is safe to rerun: an existing pairing is kept while agent
+integrations and service readiness are reconciled. `duckterm-hookd hook
+install` changes only DuckTerm-owned coding-agent Hooks; it is not a package
+installer. Update the complete runtime with `duckterm-hookd update`.
+
+Full install, upgrade, unpair, and removal semantics are documented in
+[duckterm-hookd-releases](https://github.com/ducksee/duckterm-hookd-releases#readme).
+
+## DuckTerm Web
+
 ```sh
 brew install ducksee/tap/duckterm-web
 brew services start duckterm-web
