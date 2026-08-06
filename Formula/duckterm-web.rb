@@ -1,8 +1,8 @@
 class DucktermWeb < Formula
   desc "Standalone browser terminal — SolidJS SPA + Node bridge (pure Node.js)"
   homepage "https://github.com/ducksee/DuckTerm"
-  url "https://github.com/ducksee/duckterm-web-releases/releases/download/v0.2.8/duckterm-web-v0.2.8-tiny.tar.gz"
-  sha256 "75f0597a889af0bbbb18f1ee353e707265ea82b2b00aa687860d562c7c97793a"
+  url "https://github.com/ducksee/duckterm-web-releases/releases/download/v0.2.9/duckterm-web-v0.2.9-tiny.tar.gz"
+  sha256 "b14b23993ca6d19858460aa112dad1b3973e84d9bba4ce587f62f70857f067f3"
   license :cannot_represent # proprietary (see package LICENSE)
 
   # Runtime commands executed by the packaged Node bridge. Keep tmux/OpenSSL
@@ -23,6 +23,8 @@ class DucktermWeb < Formula
         for c in "${DUCKTERM_NODE:-}" "$(command -v node 2>/dev/null)" \
           "#{HOMEBREW_PREFIX}/opt/node@24/bin/node" \
           "#{HOMEBREW_PREFIX}/bin/node" \
+          "/usr/local/opt/node@24/bin/node" \
+          "/usr/local/bin/node" \
           "$HOME"/.nvm/versions/node/*/bin/node \
           "$HOME"/.local/share/fnm/node-versions/*/installation/bin/node \
           "$HOME"/.volta/bin/node \
@@ -39,6 +41,7 @@ class DucktermWeb < Formula
         return 1
       }
       NODE=$(find_node) || {
+        echo "duckterm-web: no compatible Node found (HOME=${HOME:-<unset>}, PATH=${PATH:-<unset>})" >&2
         echo "duckterm-web needs Node >= 22.5. Existing nvm/fnm/Volta/asdf/mise/Brew installs are supported; otherwise run: brew install node@24" >&2
         exit 1
       }
@@ -49,6 +52,7 @@ class DucktermWeb < Formula
 
   service do
     run [opt_bin/"duckterm-web"]
+    environment_variables HOME: Dir.home, PATH: std_service_path_env
     keep_alive true
     log_path var/"log/duckterm-web.log"
     error_log_path var/"log/duckterm-web.log"
