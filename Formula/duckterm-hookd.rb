@@ -13,26 +13,26 @@
 class DucktermHookd < Formula
   desc "Connect supported coding agents to the DuckTerm mobile app"
   homepage "https://github.com/ducksee/duckterm-hookd-releases"
-  version "0.5.9"
+  version "0.5.10"
   license :cannot_represent # proprietary (see package LICENSE)
 
   on_macos do
     if Hardware::CPU.arm?
       url "https://github.com/ducksee/duckterm-hookd-releases/releases/download/v#{version}/duckterm-hookd_darwin-arm64.tar.gz"
-      sha256 "2a181fb8c1fdb57fb04f25c0f90b1f5eb6cffb7d029f19731b3a57801d7c775a"
+      sha256 "fc7014142c8bea8ba730fc7ba68735ee0233ecf13785c682e10597008589228b"
     else
       url "https://github.com/ducksee/duckterm-hookd-releases/releases/download/v#{version}/duckterm-hookd_darwin-amd64.tar.gz"
-      sha256 "64f51034c8eec11e9592bdbfdc7283e1f9f1943975bdf991eb45847369bd59d4"
+      sha256 "ca316048b906950ca3a950dbe451588131c970017d6e1ae04a91377e0486f84e"
     end
   end
 
   on_linux do
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
       url "https://github.com/ducksee/duckterm-hookd-releases/releases/download/v#{version}/duckterm-hookd_linux-arm64.tar.gz"
-      sha256 "277b507eaeb5935b8ceae0eb5fca8eb7e5e008ede0725f047e80ec3065de7bf8"
+      sha256 "b1a4f3be7adc059073ef6a16eb9af2e9f090cc8cc366d19efd3d15fc2fac1425"
     else
       url "https://github.com/ducksee/duckterm-hookd-releases/releases/download/v#{version}/duckterm-hookd_linux-amd64.tar.gz"
-      sha256 "22ffc56a4121123c35003ac30f5eb42669c4136f6f6d98c2a16ff8e78cfa9c95"
+      sha256 "218a891c1cb092fa212401553d39e1480f3b8aa2abc84cf756b08f9f2ca41556"
     end
   end
 
@@ -98,9 +98,12 @@ class DucktermHookd < Formula
     keep_alive true
     # Homebrew derives this from the active prefix. Do not guess Intel/Apple
     # Silicon paths in Hookd or freeze launchd's system-only default PATH.
-    environment_variables PATH: std_service_path_env
-    log_path var/"log/duckterm-hookd.log"
-    error_log_path var/"log/duckterm-hookd.log"
+    environment_variables PATH: std_service_path_env,
+                          DUCKTERM_HOOKD_LOG_PATH: "#{var}/log/duckterm-hookd.log"
+    # Hookd owns bounded rotation. launchd must not keep a second append-only
+    # descriptor to the same file while the process renames it.
+    log_path "/dev/null"
+    error_log_path "/dev/null"
     working_dir var
   end
 
