@@ -1,8 +1,8 @@
 class DucktermWeb < Formula
   desc "Standalone browser terminal — SolidJS SPA + Node bridge (pure Node.js)"
   homepage "https://github.com/ducksee/DuckTerm"
-  url "https://github.com/ducksee/duckterm-web-releases/releases/download/v0.2.9/duckterm-web-v0.2.9-tiny.tar.gz"
-  sha256 "b14b23993ca6d19858460aa112dad1b3973e84d9bba4ce587f62f70857f067f3"
+  url "https://github.com/ducksee/duckterm-web-releases/releases/download/v0.2.10/duckterm-web-v0.2.10-tiny.tar.gz"
+  sha256 "456eb80ba1b37198cc7820b19fa208c37f1f3d1caccd97fc3c4d1456217133cd"
   license :cannot_represent # proprietary (see package LICENSE)
 
   # Runtime commands executed by the packaged Node bridge. Keep tmux/OpenSSL
