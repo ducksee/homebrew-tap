@@ -13,26 +13,26 @@
 class DucktermHookd < Formula
   desc "Connect supported coding agents to the DuckTerm mobile app"
   homepage "https://github.com/ducksee/duckterm-hookd-releases"
-  version "0.5.17"
+  version "0.5.18"
   license :cannot_represent # proprietary (see package LICENSE)
 
   on_macos do
     if Hardware::CPU.arm?
       url "https://github.com/ducksee/duckterm-hookd-releases/releases/download/v#{version}/duckterm-hookd_darwin-arm64.tar.gz"
-      sha256 "303b8a887997a57abaa065bf779ae36616248190a23ab5bc6974b4ff7434eee1"
+      sha256 "5f741339eca316c86f4d04d9d8a10a252af9feadb22cbdfae695765fb2ccf2f1"
     else
       url "https://github.com/ducksee/duckterm-hookd-releases/releases/download/v#{version}/duckterm-hookd_darwin-amd64.tar.gz"
-      sha256 "93f6eb138fd7aa6604b98317d67dcabaf65b93abf1c9832ec2431c06e2c778b7"
+      sha256 "86477868fc7fa1872626bb77d35b2fcc368921d5f510737c0f3da699133a6dd4"
     end
   end
 
   on_linux do
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
       url "https://github.com/ducksee/duckterm-hookd-releases/releases/download/v#{version}/duckterm-hookd_linux-arm64.tar.gz"
-      sha256 "7eb467349e897dc69625a2697cdb93e97fcbb4963a02b9f19379b9190676a75a"
+      sha256 "c1730ae34de07a58ee15fa32801fe9144443919ee8e478510d83a898bdfadb48"
     else
       url "https://github.com/ducksee/duckterm-hookd-releases/releases/download/v#{version}/duckterm-hookd_linux-amd64.tar.gz"
-      sha256 "5c274446afa62e18686c76d99b0270749344f190ddcb02dd1d29734ab3f4040f"
+      sha256 "5b21150546a051acedf16bc975d406e18d50b3eac07a018f417068c92661b266"
     end
   end
 
@@ -65,6 +65,13 @@ class DucktermHookd < Formula
 
         Check setup health anytime:
           #{opt_bin}/duckterm-hookd status
+          #{opt_bin}/duckterm-hookd doctor
+
+        macOS may ask duckterm-hookd for Documents, Desktop, or Downloads
+        access. A Homebrew upgrade installs a new Cellar path, so that
+        grant does not follow the binary. If project browse hangs on those
+        folders, click Allow on the system dialog, or add the hookd binary
+        under System Settings → Privacy & Security → Files and Folders.
 
         Update Hookd (both names work):
           #{opt_bin}/duckterm-hookd update
